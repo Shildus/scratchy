@@ -14,7 +14,44 @@ scratchy.sprite = function (args)
 	sprite.scale = args.scale or 1
 	sprite.layer = args.layer or #scratchy.sprites + 1
 
-	sprite.draw = function (self)
+
+	--------------------------------- MOTION ---------------------------------
+
+	sprite.move = function(self, distance)
+		self.x = self.x + distance * math.sin(self.direction)
+		self.y = self.y - distance * math.cos(self.direction)
+	end
+
+	sprite.turn = function(self, degrees)
+		radians = degrees * math.pi / 180
+		self.direction = self.direction + radians
+	end
+
+	sprite.point_towards = function (self, object)
+		self.direction = math.atan2(object.x - self.x, self.y - object.y)
+	end
+
+
+	--------------------------------- LOOKS ----------------------------------
+
+	sprite.go_to_layer = function(self, layer)
+		for position, sprite in ipairs(scratchy.sprites) do
+			if sprite == self then
+				table.remove(scratchy.sprites, position)
+				table.insert(scratchy.sprites, layer, self)
+				break 
+			end
+		end
+	end
+
+	sprite.go_to_front_layer = function(self) self:go_to_layer(#scratchy.sprites) end
+	sprite.go_to_back_layer = function(self) self:go_to_layer(1) end
+
+    table.insert(scratchy.sprites, sprite.layer, sprite)
+
+	--------------------------------------------------------------------------  
+	
+	sprite.draw = function(self)
 		love.graphics.draw(
 			self.image, 
 			self.x, 
@@ -29,35 +66,10 @@ scratchy.sprite = function (args)
 		)
 	end
 
-	sprite.move = function (self, distance)
-		self.x = self.x + distance * math.sin(self.direction)
-		self.y = self.y - distance * math.cos(self.direction)
-	end
-
-	sprite.turn = function (self, degrees)
-		radians = degrees * math.pi / 180
-		self.direction = self.direction + radians
-	end
-
-	------------------------------- LOOKS -------------------------------
-
-	sprite.go_to_layer = function (self, layer)
-		for position, sprite in ipairs(scratchy.sprites) do
-			if sprite == self then
-				table.remove(scratchy.sprites, position)
-				table.insert(scratchy.sprites, layer, self)
-				break 
-			end
-		end
-	end
-
-	sprite.go_to_front_layer = function (self) self:go_to_layer(#scratchy.sprites) end
-	sprite.go_to_back_layer = function (self) self:go_to_layer(1) end
-
-    table.insert(scratchy.sprites, sprite.layer, sprite)
-
 	return sprite
 end
+
+
 
 scratchy.draw = function()
     for _, sprite in ipairs(scratchy.sprites) do

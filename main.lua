@@ -40,6 +40,7 @@ function love.update(dt)
 		player_ship:turn(180 * dt)		
 	end 
 
+	enemy_ship:point_towards(player_ship)
 	-- if love.keyboard.isDown('down') then
 	-- 	Vx = 0
 	-- 	Vy = 0
