@@ -12,6 +12,8 @@ scratchy.sprite = function (args)
 	sprite.y = args.y or 0
 	sprite.direction = args.direction or 0
 	sprite.scale = args.scale or 1
+	sprite.hide = args.hide or false
+	
 	sprite.layer = args.layer or #scratchy.sprites + 1
 
 
@@ -33,7 +35,7 @@ scratchy.sprite = function (args)
 
 
 	--------------------------------- LOOKS ----------------------------------
-
+	
 	sprite.go_to_layer = function(self, layer)
 		for position, sprite in ipairs(scratchy.sprites) do
 			if sprite == self then
@@ -72,8 +74,10 @@ end
 
 
 scratchy.draw = function()
-    for _, sprite in ipairs(scratchy.sprites) do
-        sprite:draw()
+	for _, sprite in ipairs(scratchy.sprites) do
+		if not sprite.hide then
+			sprite:draw()
+		end
     end
 end
 

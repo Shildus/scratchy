@@ -20,6 +20,7 @@ function love.load()
 		y = height / 2 + 100,
 		direction = -3.14,
 		scale = 4,
+		hide = true,
 	})
 
 	Vx = 0
@@ -72,12 +73,15 @@ end
 
 function love.keypressed(key, unicode)
 	print(key)
+	enemy_ship.hide = false
     if key == 'escape' then
 		love.event.quit()
 	elseif key == 'kp+' then
 		player_ship:go_to_front_layer()
+		player_ship.scale = player_ship.scale * 1.1
 	elseif key == 'kp-' then
 		player_ship:go_to_back_layer()
+		player_ship.scale = player_ship.scale * 0.9
 	end
 end
 
