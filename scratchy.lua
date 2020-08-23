@@ -12,6 +12,7 @@ scratchy.sprite = function (args)
 	sprite.y = args.y or 0
 	sprite.direction = args.direction or 0
 	sprite.scale = args.scale or 1
+	sprite.layer = args.layer or #scratchy.sprites + 1
 
 	sprite.draw = function (self)
 		love.graphics.draw(
@@ -38,7 +39,22 @@ scratchy.sprite = function (args)
 		self.direction = self.direction + radians
 	end
 
-    table.insert(scratchy.sprites, sprite)
+	------------------------------- LOOKS -------------------------------
+
+	sprite.go_to_layer = function (self, layer)
+		for position, sprite in ipairs(scratchy.sprites) do
+			if sprite == self then
+				table.remove(scratchy.sprites, position)
+				table.insert(scratchy.sprites, layer, self)
+				break 
+			end
+		end
+	end
+
+	sprite.go_to_front_layer = function (self) self:go_to_layer(#scratchy.sprites) end
+	sprite.go_to_back_layer = function (self) self:go_to_layer(1) end
+
+    table.insert(scratchy.sprites, sprite.layer, sprite)
 
 	return sprite
 end

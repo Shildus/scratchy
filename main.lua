@@ -70,8 +70,13 @@ end
 -- end
 
 function love.keypressed(key, unicode)
+	print(key)
     if key == 'escape' then
 		love.event.quit()
+	elseif key == 'kp+' then
+		player_ship:go_to_front_layer()
+	elseif key == 'kp-' then
+		player_ship:go_to_back_layer()
 	end
 end
 
