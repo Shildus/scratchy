@@ -26,6 +26,8 @@ function love.load()
 
 	Vx = 0
 	Vy = 0
+
+	touching_debug = true
 end
 
 function love.update(dt)

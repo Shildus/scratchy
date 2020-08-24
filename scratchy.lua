@@ -97,6 +97,13 @@ scratchy.sprite = function (args)
 			0, -- shearing x
 			0  -- shearing y
 		)
+
+		if touching_debug then
+			love.graphics.setColor(1, 0, 0, 0.5)
+			love.graphics.circle('line', self.x, self.y, self:radius())
+			love.graphics.setColor(1, 1, 1, 1)
+		end
+
 	end
 
 	return sprite
