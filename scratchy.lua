@@ -15,9 +15,6 @@ scratchy.sprite = function (args)
 	sprite.hide = args.hide or false
 	sprite.layer = args.layer or #scratchy.sprites + 1
 	sprite.sounds = {}
-	sprite.volume = 1
-
-
 
 	--------------------------------- MOTION ---------------------------------
 
@@ -55,16 +52,15 @@ scratchy.sprite = function (args)
 
 	--------------------------------- SOUND ----------------------------------
 	
-	sprite.load_sound = function(self, sound, wav_file)
+	sprite.load_sound = function(self, sound, wav_file, volume, pitch)
+		volume = volume or 1
+		pitch = pitch or 1
 		self.sounds[sound] = love.audio.newSource(wav_file, "static")
-	end
-
-	sprite.set_volume_to = function(self, volume)
-		self.volume = volume
+		self.sounds[sound]:setVolume(volume)
+		self.sounds[sound]:setPitch(pitch)
 	end
 
 	sprite.start_sound = function(self, sound)
-		self.sounds[sound]:setVolume(self.volume)
 		self.sounds[sound]:play()
 	end
 

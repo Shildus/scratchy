@@ -13,7 +13,7 @@ function love.load()
 		direction = 0,
 		scale = 2,
 	})
-	player_ship:load_sound('shot', 'Shot01.wav')
+	player_ship:load_sound('shot', 'Shot01.wav', 1.2, 1.5)
 
 	enemy_ship = scratchy.sprite({
 		image = "ship_basic.png",
@@ -79,8 +79,6 @@ function love.keypressed(key, unicode)
 		love.event.quit()
 	elseif key == 'space' then
 		player_ship:start_sound('shot')
-		player_ship:set_volume_to(player_ship.volume * 0.9)
-		print(player_ship.volume)
 	elseif key == 'kp+' then
 		player_ship:go_to_front_layer()
 		player_ship.scale = player_ship.scale * 1.1
