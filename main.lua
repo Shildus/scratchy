@@ -89,6 +89,9 @@ function love.keypressed(key, unicode)
 		player_ship.scale = player_ship.scale * 0.9
 	end
 	print("Distance from player to enemy: ", enemy_ship:distance_to(player_ship))
+	if enemy_ship:touching(player_ship) then
+		print "TOUCHING"
+	end
 end
 
 

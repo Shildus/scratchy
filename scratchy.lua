@@ -73,6 +73,14 @@ scratchy.sprite = function (args)
 		)
 	end
 
+	sprite.touching = function (self, object)
+		-- super simple circle approach
+		return self:distance_to(object) < self:radius() + object:radius()
+	end
+
+	sprite.radius = function(self)
+		return (self.image:getWidth() + self.image:getHeight()) * self.scale / 4
+	end
 
 	--------------------------------------------------------------------------  
 	
