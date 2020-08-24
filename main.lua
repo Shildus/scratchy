@@ -43,6 +43,8 @@ function love.update(dt)
 	end 
 
 	enemy_ship:point_towards(player_ship)
+
+
 	-- if love.keyboard.isDown('down') then
 	-- 	Vx = 0
 	-- 	Vy = 0
@@ -86,6 +88,7 @@ function love.keypressed(key, unicode)
 		player_ship:go_to_back_layer()
 		player_ship.scale = player_ship.scale * 0.9
 	end
+	print("Distance from player to enemy: ", enemy_ship:distance_to(player_ship))
 end
 
 

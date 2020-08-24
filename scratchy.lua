@@ -64,6 +64,16 @@ scratchy.sprite = function (args)
 		self.sounds[sound]:play()
 	end
 
+	-------------------------------- SENSING ---------------------------------
+
+	sprite.distance_to = function (self, object)
+		return math.sqrt( 
+			(object.x - self.x) * (object.x - self.x) + 
+			(object.y - self.y) * (object.y - self.y)
+		)
+	end
+
+
 	--------------------------------------------------------------------------  
 	
 	sprite.draw = function(self)
