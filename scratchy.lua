@@ -16,6 +16,8 @@ scratchy.sprite = function (args)
 	sprite.layer = args.layer or #scratchy.sprites + 1
 	sprite.sounds = {}
 
+	sprite.update = function(dt) end
+
 	--------------------------------- MOTION ---------------------------------
 
 	sprite.move = function(self, distance)
@@ -82,6 +84,13 @@ scratchy.sprite = function (args)
 		return (self.image:getWidth() + self.image:getHeight()) * self.scale / 4
 	end
 
+	sprite.on_screen = function(self)
+		local radius = self:radius()
+		return self.x + radius > 0 
+			and self.x - radius < love.graphics.getWidth()
+			and self.y + radius > 0
+			and self.y - radius < love.graphics.getHeight()
+	end
 	--------------------------------------------------------------------------  
 	
 	sprite.draw = function(self)
@@ -106,10 +115,31 @@ scratchy.sprite = function (args)
 
 	end
 
+	sprite.delete = function(self)
+		for position, sprite in ipairs(scratchy.sprites) do
+			if sprite == self then
+				table.remove(scratchy.sprites, position)
+				break 
+			end
+		end
+
+		-- Not sure if it is needed 
+		for k, v in pairs(_G) do
+			if v == self then 
+				_G[k] = nil
+				break
+			end
+		end
+	end
+
 	return sprite
 end
 
-
+scratchy.update = function(dt)
+	for _, sprite in ipairs(scratchy.sprites) do
+		sprite:update(dt)
+    end
+end
 
 scratchy.draw = function()
 	for _, sprite in ipairs(scratchy.sprites) do
