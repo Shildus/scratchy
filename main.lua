@@ -3,7 +3,7 @@
 scratchy = require 'scratchy'
 
 function love.load()
-	love.window.setMode(1920, 1050, {})
+	love.window.setMode(800, 600, {})
 	width = love.graphics.getWidth()
 	height = love.graphics.getHeight()
 	
@@ -19,7 +19,7 @@ function love.load()
 		x = width / 2,
 		y = height / 2,
 		direction = 0,
-		scale = 2,
+		scale = 2
 	})
 	player_ship:load_sound('shot', 'Shot01.wav', 1.2, 1.5)
 	
@@ -32,9 +32,14 @@ function love.load()
 		})
 		player_ship:start_sound('shot')
 		shot.update = function(self, dt)
-			if self:on_screen() then
-				self:move(200 * dt)
-			else
+			if not self:on_screen() then
+				self:delete()
+			end
+			
+			self:move(200 * dt)
+
+			if self:touching(enemy_ship) then
+				enemy_ship:delete()
 				self:delete()
 			end
 		end
@@ -46,8 +51,11 @@ function love.load()
 		y = height / 2 + 100,
 		direction = -3.14,
 		scale = 4,
-		hide = true,
 	})
+
+	enemy_ship.update = function(self)
+		self:point_towards(player_ship)
+	end
 
 	Vx = 0
 	Vy = 0
@@ -73,7 +81,7 @@ function love.update(dt)
 		player_ship:turn(180 * dt)		
 	end 
 
-	enemy_ship:point_towards(player_ship)
+	
 
 	scratchy.update(dt)
 
@@ -110,7 +118,7 @@ end
 
 function love.keypressed(key, unicode)
 	print(key)
-	enemy_ship.hide = false
+
     if key == 'escape' then
 		love.event.quit()
 	elseif key == 'space' then

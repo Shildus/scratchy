@@ -12,7 +12,8 @@ scratchy.sprite = function (args)
 	sprite.y = args.y or 0
 	sprite.direction = args.direction or 0
 	sprite.scale = args.scale or 1
-	sprite.hide = args.hide or false
+	sprite.rotation_style = args.rotation_style  -- left-right | don't rotate
+	sprite.hidden = args.hidden or false
 	sprite.layer = args.layer or #scratchy.sprites + 1
 	sprite.sounds = {}
 
@@ -77,6 +78,9 @@ scratchy.sprite = function (args)
 
 	sprite.touching = function (self, object)
 		-- super simple circle approach
+		if self.hidden or object.hidden then
+			return false
+		end
 		return self:distance_to(object) < self:radius() + object:radius()
 	end
 
@@ -94,12 +98,26 @@ scratchy.sprite = function (args)
 	--------------------------------------------------------------------------  
 	
 	sprite.draw = function(self)
+
+		direction = self.direction
+		scale_x = self.scale
+
+		if self.rotation_style == 'left-right' then
+			direction = 0
+			if math.sin(self.direction) < 0 then
+				scale_x = - self.scale		-- Negative scale flips the image!
+			end
+		elseif self.rotation_style == 'don\'t rotate' then
+			direction = 0
+		end
+
+
 		love.graphics.draw(
 			self.image, 
 			self.x, 
 			self.y,
-			self.direction,
-			self.scale,
+			direction,
+			scale_x,
 			self.scale,
 			self.image:getWidth()/2,
 			self.image:getHeight()/2,
@@ -122,14 +140,6 @@ scratchy.sprite = function (args)
 				break 
 			end
 		end
-
-		-- Not sure if it is needed 
-		for k, v in pairs(_G) do
-			if v == self then 
-				_G[k] = nil
-				break
-			end
-		end
 	end
 
 	return sprite
@@ -143,7 +153,7 @@ end
 
 scratchy.draw = function()
 	for _, sprite in ipairs(scratchy.sprites) do
-		if not sprite.hide then
+		if not sprite.hidden then
 			sprite:draw()
 		end
     end
