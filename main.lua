@@ -53,8 +53,13 @@ function love.load()
 		scale = 4,
 	})
 
-	enemy_ship.update = function(self)
+	enemy_ship.update = function(self, dt)
 		self:point_towards(player_ship)
+		self:move(20 * dt)
+		if self:touching(player_ship) then
+			player_ship:delete()
+			game_over = true
+		end
 	end
 
 	Vx = 0
@@ -65,6 +70,10 @@ end
 
 function love.update(dt)
 	
+	if game_over then 
+		return
+	end
+
 	if love.keyboard.isDown('up') then
 		player_ship:move(100 * dt)
 	end 
@@ -82,7 +91,7 @@ function love.update(dt)
 	end 
 
 	
-
+	
 	scratchy.update(dt)
 
 	-- if love.keyboard.isDown('down') then
@@ -139,5 +148,8 @@ end
 
 function love.draw()
 	scratchy.draw()
+	if game_over then
+		love.graphics.print("GAME OVER", width/2, height / 2, 0, 5, 5, 35, 10)
+	end
 	
 end
