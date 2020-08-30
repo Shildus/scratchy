@@ -46,26 +46,60 @@ function love.load()
 	end
 
 	enemy_ship = scratchy.sprite({
-		image = "ship_basic.png",
+		image = "evil_ship.png",
 		x = width / 2 + 100,
 		y = height / 2 + 100,
 		direction = -3.14,
-		scale = 4,
+		scale = 0.2,
 	})
 
+	enemy_ship.shoot = function(self)
+		print "enemy shoots"
+		shot = scratchy.sprite({
+			image = "enemy_shot.png",
+			x = self.x,
+			y = self.y,
+			direction = self.direction,
+			scale = 0.3
+		})
+		shot.update = function(self, dt)
+			if not self:on_screen() then
+				self:delete()
+			end
+			
+			self:move(150 * dt)
+
+			if self:touching(player_ship) then
+				player_ship:delete()
+				self:delete()
+				game_over = true
+			end
+		end
+
+	end
+
+	enemy_ship.cool_down = 5
 	enemy_ship.update = function(self, dt)
 		self:point_towards(player_ship)
 		self:move(20 * dt)
+					
 		if self:touching(player_ship) then
 			player_ship:delete()
 			game_over = true
+		end
+
+		self.cool_down = self.cool_down - dt
+		if self.cool_down < 0 then
+			self.cool_down = 5
+			self:shoot()
+			
 		end
 	end
 
 	Vx = 0
 	Vy = 0
 
-	touching_debug = true
+	-- touching_debug = true
 end
 
 function love.update(dt)
@@ -126,11 +160,10 @@ end
 
 
 function love.keypressed(key, unicode)
-	print(key)
 
     if key == 'escape' then
 		love.event.quit()
-	elseif key == 'space' then
+	elseif key == 'space' and not game_over then
 		player_ship:shoot()
 	elseif key == 'kp+' then
 		player_ship:go_to_front_layer()
@@ -138,10 +171,6 @@ function love.keypressed(key, unicode)
 	elseif key == 'kp-' then
 		player_ship:go_to_back_layer()
 		player_ship.scale = player_ship.scale * 0.9
-	end
-	print("Distance from player to enemy: ", enemy_ship:distance_to(player_ship))
-	if enemy_ship:touching(player_ship) then
-		print "TOUCHING"
 	end
 end
 
